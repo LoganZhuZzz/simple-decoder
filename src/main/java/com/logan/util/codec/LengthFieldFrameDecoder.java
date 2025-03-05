@@ -79,6 +79,9 @@ public class LengthFieldFrameDecoder {
 
     private int findFrameHeader(ByteBuffer buffer) {
         for (int i = buffer.position(); i <= buffer.limit() - FRAME_HEADER.length; i++) {
+            if(buffer.get(i) != FRAME_HEADER[0]) {
+                continue;
+            }
             byte[] candidate = new byte[FRAME_HEADER.length];
             buffer.get(i, candidate);
             if (Arrays.equals(FRAME_HEADER, candidate)) {
