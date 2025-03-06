@@ -85,7 +85,7 @@ public class LengthFieldFrameDecoder {
             }
             hitIndex++;
             if (hitIndex == FRAME_HEADER.length) {
-                return i;
+                return i + 1 - FRAME_HEADER.length;
             }
         }
         return -1;
