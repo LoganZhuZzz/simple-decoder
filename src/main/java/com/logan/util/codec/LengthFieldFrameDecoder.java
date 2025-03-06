@@ -4,7 +4,6 @@ import com.logan.util.constants.DataType;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -78,14 +77,15 @@ public class LengthFieldFrameDecoder {
     }
 
     private int findFrameHeader(ByteBuffer buffer) {
+        int hitIndex = 0;
         for (int i = buffer.position(); i <= buffer.limit() - FRAME_HEADER.length; i++) {
-            if(buffer.get(i) != FRAME_HEADER[0]) {
+            if (buffer.get(i) != FRAME_HEADER[hitIndex]) {
+                hitIndex = 0;
                 continue;
             }
-            byte[] candidate = new byte[FRAME_HEADER.length];
-            buffer.get(i, candidate);
-            if (Arrays.equals(FRAME_HEADER, candidate)) {
-                return i;
+            hitIndex++;
+            if (hitIndex == FRAME_HEADER.length) {
+                return i + 1 - FRAME_HEADER.length;
             }
         }
         return -1;
